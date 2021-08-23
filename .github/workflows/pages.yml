@@ -1,16 +1,10 @@
-on:
-  push:
-    branches:
-      - main  # Set a branch name to trigger deployment
-  pull_request:
+on: [push, pull_request]
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - run: npm ci
 
