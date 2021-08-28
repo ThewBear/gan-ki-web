@@ -1,49 +1,72 @@
 <template>
-  <h1>
-    Stain translation
-  </h1>
-  <p>Data from
-    <a href="https://github.com/ccipd/DL-kidneyhistologicprimitives">DL-kidneyhistologicprimitives</a>
+  <h1>Stain translation</h1>
+  <p>
+    Data from
+    <a href="https://github.com/ccipd/DL-kidneyhistologicprimitives"
+      >DL-kidneyhistologicprimitives</a
+    >
   </p>
   <div class="buttons">
-    <button v-for="type in Object.keys(type_data)" :key="type" type="button" @click="selected_type = type">
-      {{ type_data[type][0] }} to {{ type_data[type][1] }} ({{ type_data[type][2] }})
+    <button
+      v-for="type in Object.keys(type_data)"
+      :key="type"
+      :class="{ active: selected_type === type }"
+      type="button"
+      @click="selected_type = type"
+    >
+      {{ type_data[type][0] }} to {{ type_data[type][1] }} ({{
+        type_data[type][2]
+      }})
     </button>
   </div>
   <div class="grid" v-if="selected_type">
     <h2>{{ type_data[selected_type][0] }} (real)</h2>
-    number
+    <div>number</div>
     <h2>{{ type_data[selected_type][1] }} (fake)</h2>
+  </div>
+  <div class="grid gallery" v-if="selected_type">
     <template v-for="n in type_data[selected_type][2]" :key="n">
-      <Image :id="'real ' + String(n-1)" :src="getImageUrl(n-1, 'real')" :alt="'real ' + String(n-1)"></Image>
-      {{ n-1 }}
-      <Image :id="'fake ' + String(n-1)" :src="getImageUrl(n-1, 'fake')" :alt="'fake ' + String(n-1)"></Image>
+      <Image
+        :id="'real ' + String(n - 1)"
+        :src="getImageUrl(n - 1, 'real')"
+        :alt="'real ' + String(n - 1)"
+      ></Image>
+      {{ n - 1 }}
+      <Image
+        :id="'fake ' + String(n - 1)"
+        :src="getImageUrl(n - 1, 'fake')"
+        :alt="'fake ' + String(n - 1)"
+      ></Image>
     </template>
   </div>
   <p class="end">End</p>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import Image from './components/Image.vue'
+import { ref } from "vue";
+import Image from "./components/Image.vue";
 
 // This starter template is using Vue 3 experimental <script setup> SFCs
 // Check out https://github.com/vuejs/rfcs/blob/master/active-rfcs/0040-script-setup.md
 
-const selected_type = ref(null)
+const selected_type = ref(null);
 
 const type_data = {
-  "he_pas": ["H&E", "PAS", 501], // From, To, Images
-  "pas_he": ["PAS", "H&E", 467]
-}
+  he_pas: ["H&E", "PAS", 501], // From, To, Images
+  pas_he: ["PAS", "H&E", 467],
+};
 
 function getImageUrl(n, mode) {
-  return new URL(`./assets/cycle/${selected_type.value}/inference_${n}_${mode}.png`, import.meta.url).href
+  return new URL(
+    `./assets/cycle/${selected_type.value}/inference_${n}_${mode}.png`,
+    import.meta.url
+  ).href;
 }
 </script>
 
 <style>
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
 }
@@ -57,7 +80,8 @@ body, html {
 }
 
 #app {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -73,16 +97,21 @@ body, html {
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  max-width: 768px;
+  max-width: 1024px;
 }
 
 .grid {
   display: grid;
   grid-template-columns: 1fr min-content 1fr;
-  gap: 1rem;
+  gap: 0.5rem;
   margin: 0 auto;
-  max-width: 768px;
+  max-width: 1024px;
+  max-height: 100vh;
   align-items: center;
+}
+
+.gallery {
+  overflow: auto;
 }
 
 .end {
@@ -91,7 +120,9 @@ body, html {
 }
 
 img {
-  margin: 0 auto;
+  margin: auto;
+  width: 100%;
+  height: 100%;
 }
 
 a {
@@ -103,6 +134,10 @@ button {
   padding: 1.5rem;
   margin: 0.5rem;
   cursor: pointer;
+}
+
+button.active {
+  border: 0.5rem solid #71dd71;
 }
 
 button:focus {
