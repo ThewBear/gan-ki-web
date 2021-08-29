@@ -19,26 +19,29 @@
       }})
     </button>
   </div>
-  <div class="grid" v-if="selected_type">
-    <h2>{{ type_data[selected_type][0] }} (real)</h2>
-    <div>number</div>
-    <h2>{{ type_data[selected_type][1] }} (fake)</h2>
+  <div class="grid-wrapper">
+    <div class="grid grid-header" v-if="selected_type">
+      <h2>{{ type_data[selected_type][0] }} (real)</h2>
+      <div>number</div>
+      <h2>{{ type_data[selected_type][1] }} (fake)</h2>
+    </div>
+    <div class="grid" v-if="selected_type">
+      <template v-for="n in type_data[selected_type][2]" :key="n">
+        <Image
+          :id="'real ' + String(n - 1)"
+          :src="getImageUrl(n - 1, 'real')"
+          :alt="'real ' + String(n - 1)"
+        ></Image>
+        {{ n - 1 }}
+        <Image
+          :id="'fake ' + String(n - 1)"
+          :src="getImageUrl(n - 1, 'fake')"
+          :alt="'fake ' + String(n - 1)"
+        ></Image>
+      </template>
+    </div>
   </div>
-  <div class="grid gallery" v-if="selected_type">
-    <template v-for="n in type_data[selected_type][2]" :key="n">
-      <Image
-        :id="'real ' + String(n - 1)"
-        :src="getImageUrl(n - 1, 'real')"
-        :alt="'real ' + String(n - 1)"
-      ></Image>
-      {{ n - 1 }}
-      <Image
-        :id="'fake ' + String(n - 1)"
-        :src="getImageUrl(n - 1, 'fake')"
-        :alt="'fake ' + String(n - 1)"
-      ></Image>
-    </template>
-  </div>
+
   <p class="end">End</p>
 </template>
 
@@ -80,15 +83,15 @@ html {
 }
 
 #app {
+  --bg-color: #31333a;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #f0f0f0;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-  background: #31333a;
+  padding: 1rem 0;
+  background: var(--bg-color);
   min-height: 100vh;
 }
 
@@ -104,14 +107,20 @@ html {
   display: grid;
   grid-template-columns: 1fr min-content 1fr;
   gap: 0.5rem;
-  margin: 0 auto;
-  max-width: 1024px;
-  max-height: 100vh;
   align-items: center;
 }
 
-.gallery {
+.grid-wrapper {
   overflow: auto;
+  margin: 0 auto;
+  max-width: 1024px;
+  max-height: 100vh;
+}
+
+.grid-header {
+  position: sticky;
+  top: 0;
+  background: var(--bg-color);
 }
 
 .end {
